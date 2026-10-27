@@ -1,0 +1,44 @@
+/*
+ * The "look" — design tokens only. Sections read these variables and never
+ * hard-code colours, fonts or spacing, so a look can be swapped without
+ * touching a section (the same rule Ethos Builder's look presets follow).
+ *
+ * Placeholder values — the real brand look is designed next.
+ */
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f5f5f4;
+  --color-text: #1c1917;
+  --color-muted: #57534e;
+  --color-accent: #1c1917;
+  --color-accent-text: #ffffff;
+
+  --font-display: system-ui, sans-serif;
+  --font-body: system-ui, sans-serif;
+
+  --space-section: clamp(4rem, 10vw, 8rem);
+  --width-content: 72rem;
+  --radius: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0c0a09;
+    --color-surface: #1c1917;
+    --color-text: #fafaf9;
+    --color-muted: #a8a29e;
+    --color-accent: #fafaf9;
+    --color-accent-text: #0c0a09;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}

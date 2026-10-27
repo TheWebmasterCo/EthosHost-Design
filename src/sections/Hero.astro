@@ -1,0 +1,35 @@
+---
+/**
+ * Hero — section #1 of the library.
+ * Props are the section's settings: the only things content or the AI may change.
+ */
+export interface Props {
+  eyebrow?: string;
+  heading: string;
+  subheading?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  align?: 'left' | 'center';
+}
+
+const { eyebrow, heading, subheading, ctaLabel, ctaHref, align = 'center' } = Astro.props;
+---
+<section class="hero" data-align={align}>
+  <div class="inner">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{heading}</h1>
+    {subheading && <p class="sub">{subheading}</p>}
+    {ctaLabel && ctaHref && <a class="cta" href={ctaHref}>{ctaLabel}</a>}
+  </div>
+</section>
+
+<style>
+  .hero { padding: var(--space-section) 1rem; }
+  .inner { max-width: var(--width-content); margin: 0 auto; }
+  .hero[data-align='center'] .inner { text-align: center; }
+  .eyebrow { color: var(--color-muted); font-size: 0.875rem; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 1rem; }
+  h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.05; margin: 0; }
+  .sub { color: var(--color-muted); font-size: 1.25rem; max-width: 40rem; margin: 1.5rem 0 0; }
+  .hero[data-align='center'] .sub { margin-inline: auto; }
+  .cta { display: inline-block; margin-top: 2rem; padding: 0.875rem 1.5rem; border-radius: var(--radius); background: var(--color-accent); color: var(--color-accent-text); text-decoration: none; font-weight: 600; }
+</style>
