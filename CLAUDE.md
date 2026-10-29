@@ -9,5 +9,8 @@ in `TheWebmasterCo/EthosHost`.
   section library.
 - Audience is **business owners, not designers**: plain words, no hosting jargon.
 - Brand: company **EthosHost**, builder product **Ethos Builder**.
+- **Homepage hero = the prompt builder** ("describe your business" box). Behind it,
+  anonymous visitors get rules + pooled industry drafts only, never Claude — see
+  "AI engine — DECIDED" in the brief.
 - Pin exact dependency versions. Keep every page `noindex` until launch.
 - Interim hosting: Cloudflare Pages (static `dist/`).
