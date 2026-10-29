@@ -1,0 +1,26 @@
+---
+/**
+ * The homepage's sections and words, shared by / and the /looks review pages.
+ * Composition only — no styling here.
+ */
+import SiteHeader from './SiteHeader.astro';
+import PromptHero from './PromptHero.astro';
+---
+<SiteHeader
+  links={[
+    { label: 'How it works', href: '#how' },
+    { label: 'Pricing', href: '#pricing' },
+    { label: 'Sign in', href: '#signin' },
+  ]}
+  ctaLabel="Start free"
+  ctaHref="#start"
+/>
+<PromptHero
+  eyebrow="Websites for business owners"
+  heading="Tell us about your business. We'll build your website."
+  subheading="Ethos Builder writes, designs and publishes a real site in minutes — then keeps it fast, secure and yours, on hosting we run ourselves."
+  placeholder="e.g. I run a family-owned house cleaning company in Austin, Texas…"
+  buttonLabel="Build my site"
+  examples={['A plumber in Denver', 'A yoga studio', 'A family restaurant', 'A wedding photographer']}
+  note="Free to try — no card needed. Your site, your code, always."
+/>

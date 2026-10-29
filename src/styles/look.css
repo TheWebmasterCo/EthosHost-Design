@@ -1,35 +1,70 @@
 /*
- * The "look" — design tokens only. Sections read these variables and never
- * hard-code colours, fonts or spacing, so a look can be swapped without
- * touching a section (the same rule Ethos Builder's look presets follow).
+ * Looks — design tokens only. Sections read these variables and never hard-code
+ * colours, fonts or spacing, so a look can be swapped without touching a section
+ * (the same rule Ethos Builder's look presets follow).
  *
- * Placeholder values — the real brand look is designed next.
+ * Three candidate brand looks, picked with <html data-look="…">.
+ * `evergreen` is the default until one is chosen.
  */
-:root {
-  --color-bg: #ffffff;
-  --color-surface: #f5f5f4;
-  --color-text: #1c1917;
-  --color-muted: #57534e;
-  --color-accent: #1c1917;
+:root,
+[data-look='evergreen'] {
+  --color-bg: #f7f3ec;
+  --color-surface: #ffffff;
+  --color-surface-2: #efe8dc;
+  --color-border: #e3dacb;
+  --color-text: #1b2620;
+  --color-muted: #5a6660;
+  --color-accent: #1f4d3a;
   --color-accent-text: #ffffff;
+  --color-highlight: #c2913f;
 
-  --font-display: system-ui, sans-serif;
-  --font-body: system-ui, sans-serif;
-
-  --space-section: clamp(4rem, 10vw, 8rem);
-  --width-content: 72rem;
-  --radius: 0.5rem;
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --display-weight: 500;
+  --display-tracking: -0.02em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0c0a09;
-    --color-surface: #1c1917;
-    --color-text: #fafaf9;
-    --color-muted: #a8a29e;
-    --color-accent: #fafaf9;
-    --color-accent-text: #0c0a09;
-  }
+[data-look='ink'] {
+  --color-bg: #f6f5fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eceaf7;
+  --color-border: #dfdcef;
+  --color-text: #15172b;
+  --color-muted: #5b5e78;
+  --color-accent: #4f46e5;
+  --color-accent-text: #ffffff;
+  --color-highlight: #6fcfbf;
+
+  --font-display: 'Inter Variable', system-ui, sans-serif;
+  --display-weight: 650;
+  --display-tracking: -0.035em;
+}
+
+[data-look='tide'] {
+  --color-bg: #f3f7f6;
+  --color-surface: #ffffff;
+  --color-surface-2: #e2eeec;
+  --color-border: #d3e3e0;
+  --color-text: #10282b;
+  --color-muted: #4f6668;
+  --color-accent: #0f5f66;
+  --color-accent-text: #ffffff;
+  --color-highlight: #f2b544;
+
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --display-weight: 600;
+  --display-tracking: -0.025em;
+}
+
+:root {
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+
+  --space-section: clamp(4rem, 10vw, 7.5rem);
+  --space-gutter: 1rem;
+  --width-content: 72rem;
+  --radius: 0.75rem;
+  --radius-lg: 1.25rem;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -8px rgb(0 0 0 / 0.12);
+  --shadow-lg: 0 2px 4px rgb(0 0 0 / 0.04), 0 24px 60px -20px rgb(0 0 0 / 0.25);
 }
 
 *, *::before, *::after { box-sizing: border-box; }

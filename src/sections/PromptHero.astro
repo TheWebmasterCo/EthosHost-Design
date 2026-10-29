@@ -1,0 +1,130 @@
+---
+/**
+ * PromptHero — the front door. A "describe your business" box, example chips,
+ * and a preview of the kind of site Ethos Builder makes.
+ *
+ * Behind it (later): anonymous visitors get the rules engine + pooled industry
+ * drafts only, never Claude — see "AI engine — DECIDED" in the brief.
+ */
+export interface Props {
+  eyebrow?: string;
+  heading: string;
+  subheading?: string;
+  placeholder: string;
+  buttonLabel: string;
+  examples?: string[];
+  note?: string;
+  showPreview?: boolean;
+}
+
+const {
+  eyebrow,
+  heading,
+  subheading,
+  placeholder,
+  buttonLabel,
+  examples = [],
+  note,
+  showPreview = true,
+} = Astro.props;
+---
+<section class="prompt-hero">
+  <div class="inner">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{heading}</h1>
+    {subheading && <p class="sub">{subheading}</p>}
+
+    <form class="prompt" action="#" data-prompt-form>
+      <label class="visually-hidden" for="prompt-input">Describe your business</label>
+      <textarea id="prompt-input" name="prompt" rows="3" placeholder={placeholder}></textarea>
+      <div class="prompt-bar">
+        {examples.length > 0 && (
+          <div class="chips" aria-label="Examples">
+            {examples.map((e) => <button type="button" class="chip" data-example={e}>{e}</button>)}
+          </div>
+        )}
+        <button type="submit" class="go">{buttonLabel} <span aria-hidden="true">→</span></button>
+      </div>
+    </form>
+
+    {note && <p class="note">{note}</p>}
+  </div>
+
+  {showPreview && (
+    <div class="preview" aria-hidden="true">
+      <div class="browser">
+        <div class="browser-bar"><span></span><span></span><span></span><div class="url">sparkleclean-austin.com</div></div>
+        <div class="mini">
+          <div class="mini-nav"><b>Sparkle Clean</b><i>Services</i><i>Reviews</i><i>Contact</i><em>Get a quote</em></div>
+          <div class="mini-hero">
+            <div>
+              <strong>Austin's friendliest home cleaners.</strong>
+              <p>Family-owned since 2014. Insured, background-checked, and on time.</p>
+              <em>Call (512) 555-0142</em>
+            </div>
+            <div class="mini-photo"></div>
+          </div>
+          <div class="mini-cards"><div></div><div></div><div></div></div>
+        </div>
+      </div>
+    </div>
+  )}
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-example]').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const input = document.getElementById('prompt-input') as HTMLTextAreaElement | null;
+      if (!input) return;
+      input.value = `I run ${chip.dataset.example?.replace(/^A /, 'a ')}…`;
+      input.focus();
+    });
+  });
+  // Not wired to the builder yet — keep the design preview from navigating.
+  document.querySelector('[data-prompt-form]')?.addEventListener('submit', (e) => e.preventDefault());
+</script>
+
+<style>
+  .prompt-hero { padding: clamp(3rem, 8vw, 6rem) var(--space-gutter) var(--space-section); overflow: hidden; }
+  .inner { max-width: 48rem; margin: 0 auto; text-align: center; }
+  .eyebrow { display: inline-block; margin: 0 0 1.25rem; padding: 0.375rem 0.875rem; border-radius: 999px; background: var(--color-surface-2); color: var(--color-accent); font-size: 0.8125rem; font-weight: 600; }
+  h1 { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(2.5rem, 6.5vw, 4.75rem); line-height: 1.02; margin: 0; text-wrap: balance; }
+  .sub { color: var(--color-muted); font-size: clamp(1.0625rem, 2vw, 1.25rem); max-width: 38rem; margin: 1.5rem auto 0; text-wrap: pretty; }
+
+  .prompt { margin: 2.5rem auto 0; text-align: left; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: 1rem; }
+  .prompt:focus-within { border-color: var(--color-accent); }
+  textarea { width: 100%; border: 0; resize: none; background: transparent; color: var(--color-text); font: inherit; font-size: 1.125rem; line-height: 1.5; padding: 0.5rem; outline: none; }
+  textarea::placeholder { color: var(--color-muted); opacity: 0.8; }
+  .prompt-bar { display: flex; align-items: flex-end; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; padding-top: 0.5rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip { font: inherit; font-size: 0.8125rem; color: var(--color-muted); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 999px; padding: 0.375rem 0.75rem; cursor: pointer; }
+  .chip:hover { color: var(--color-text); border-color: var(--color-muted); }
+  .go { font: inherit; font-weight: 600; font-size: 1rem; color: var(--color-accent-text); background: var(--color-accent); border: 0; border-radius: var(--radius); padding: 0.875rem 1.375rem; cursor: pointer; margin-left: auto; }
+  .go:hover { filter: brightness(1.1); }
+  .note { margin: 1rem 0 0; color: var(--color-muted); font-size: 0.875rem; }
+
+  .preview { max-width: 64rem; margin: clamp(3rem, 7vw, 5rem) auto 0; position: relative; }
+  .preview::before { content: ''; position: absolute; inset: 10% -5% -20%; background: radial-gradient(closest-side, color-mix(in srgb, var(--color-highlight) 35%, transparent), transparent); z-index: 0; }
+  .browser { position: relative; z-index: 1; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+  .browser-bar { display: flex; align-items: center; gap: 0.375rem; padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); background: var(--color-bg); }
+  .browser-bar span { width: 0.625rem; height: 0.625rem; border-radius: 50%; background: var(--color-border); }
+  .url { margin: 0 auto; font-size: 0.75rem; color: var(--color-muted); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 999px; padding: 0.125rem 1rem; }
+  .mini { padding: clamp(1rem, 3vw, 2rem); }
+  .mini-nav { display: flex; align-items: center; gap: 1.25rem; font-size: 0.8125rem; color: var(--color-muted); }
+  .mini-nav b { color: var(--color-text); font-family: var(--font-display); font-size: 1rem; margin-right: auto; }
+  .mini-nav i { font-style: normal; }
+  .mini-nav em, .mini-hero em { font-style: normal; font-weight: 600; color: var(--color-accent-text); background: var(--color-accent); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: 0.8125rem; }
+  .mini-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2rem; align-items: center; margin-top: clamp(1.5rem, 4vw, 3rem); text-align: left; }
+  .mini-hero strong { display: block; font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(1.25rem, 3vw, 2.25rem); line-height: 1.1; }
+  .mini-hero p { color: var(--color-muted); font-size: 0.9375rem; margin: 0.75rem 0 1.25rem; }
+  .mini-photo { aspect-ratio: 4 / 3; border-radius: var(--radius); background: linear-gradient(135deg, var(--color-surface-2), color-mix(in srgb, var(--color-accent) 30%, var(--color-surface-2))); }
+  .mini-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+  .mini-cards div { height: 5rem; border-radius: var(--radius); background: var(--color-bg); border: 1px solid var(--color-border); }
+  @media (max-width: 640px) {
+    .mini-hero { grid-template-columns: 1fr; }
+    .mini-nav i { display: none; }
+    .go { width: 100%; }
+  }
+
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>

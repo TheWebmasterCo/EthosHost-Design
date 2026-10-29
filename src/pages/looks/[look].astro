@@ -1,0 +1,17 @@
+---
+/**
+ * Design review only: the homepage in each candidate look.
+ * /looks/evergreen, /looks/ink, /looks/tide
+ */
+import Page from '../../layouts/Page.astro';
+import Home from '../../sections/HomeContent.astro';
+
+export function getStaticPaths() {
+  return ['evergreen', 'ink', 'tide'].map((look) => ({ params: { look } }));
+}
+
+const look = Astro.params.look as 'evergreen' | 'ink' | 'tide';
+---
+<Page title={`EthosHost — look: ${look}`} description="Design review" look={look}>
+  <Home />
+</Page>
