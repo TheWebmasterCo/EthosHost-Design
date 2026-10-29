@@ -5,22 +5,100 @@
  */
 import SiteHeader from './SiteHeader.astro';
 import PromptHero from './PromptHero.astro';
+import HowItWorks from './HowItWorks.astro';
+import PlatformShowcase from './PlatformShowcase.astro';
+import FeatureGrid from './FeatureGrid.astro';
+import ClosingCta from './ClosingCta.astro';
 ---
 <SiteHeader
   links={[
-    { label: 'How it works', href: '#how' },
+    { label: 'Builder', href: '#builder' },
+    { label: 'Platform', href: '#platform' },
+    { label: 'Hosting', href: '#hosting' },
     { label: 'Pricing', href: '#pricing' },
-    { label: 'Sign in', href: '#signin' },
   ]}
   ctaLabel="Start free"
   ctaHref="#start"
 />
+
 <PromptHero
   eyebrow="Websites for business owners"
   heading="Tell us about your business. We'll build your website."
-  subheading="Ethos Builder writes, designs and publishes a real site in minutes — then keeps it fast, secure and yours, on hosting we run ourselves."
+  subheading="Ethos Builder makes your site in minutes. Then run everything from one place — pages, content, leads and more — on hosting we run ourselves."
   placeholder="e.g. I run a family-owned house cleaning company in Austin, Texas…"
   buttonLabel="Build my site"
   examples={['A plumber in Denver', 'A yoga studio', 'A family restaurant', 'A wedding photographer']}
   note="Free to try — no card needed. Your site, your code, always."
+/>
+
+<HowItWorks
+  id="builder"
+  eyebrow="Build"
+  heading="A real website in minutes, not weeks."
+  steps={[
+    { title: 'Describe your business', body: 'Tell us what you do and where. Got an old website or Google profile? We can pull your details from it.' },
+    { title: 'Pick a look', body: 'Choose from three designs, already filled with your business. Change anything by asking, or by clicking it.' },
+    { title: 'Publish', body: 'Put it live on your own domain with security built in. No plugins, no setup, nothing to install.' },
+  ]}
+/>
+
+<PlatformShowcase
+  id="platform"
+  eyebrow="Run"
+  heading="Then you're in control."
+  subheading="Everything your site needs after launch lives in one place. Ask Ethos to make a change, or do it yourself — same result either way."
+  tabs={[
+    {
+      id: 'pages', label: 'Pages', title: 'Manage every page',
+      body: 'Add, reorder or hide pages, and set how each one shows up in Google.',
+      view: { kind: 'table', columns: ['Page', 'Status', 'Updated'], rows: [['Home', 'Live', 'Today'], ['Services', 'Live', 'Yesterday'], ['About us', 'Live', 'Oct 12'], ['Spring promo', 'Draft', 'Oct 10']] },
+    },
+    {
+      id: 'content', label: 'Content', title: 'Edit content as simple fields',
+      body: 'Services, team members, menu items, listings — fill in a form and every page that shows them updates.',
+      view: { kind: 'fields', record: 'Service: Deep clean', fields: [{ label: 'Name', value: 'Deep clean' }, { label: 'Starting price', value: '$249' }, { label: 'Description', value: 'Top-to-bottom clean for move-ins, move-outs and spring refreshes.', multiline: true }] },
+    },
+    {
+      id: 'data', label: 'Data', title: 'Your data, like a spreadsheet',
+      body: 'See and edit everything your site stores in one table. No databases to learn.',
+      view: { kind: 'table', columns: ['Service', 'Price', 'Duration', 'Shown'], rows: [['Standard clean', '$129', '2 hrs', 'Yes'], ['Deep clean', '$249', '4 hrs', 'Yes'], ['Move-out clean', '$299', '5 hrs', 'Yes'], ['Office clean', 'Quote', '—', 'No']] },
+    },
+    {
+      id: 'leads', label: 'Leads', title: 'Never miss a customer',
+      body: 'Every form entry lands here and in your inbox the moment it arrives.',
+      view: { kind: 'table', columns: ['Name', 'Asked about', 'Received'], rows: [['Maria G.', 'Deep clean quote', '9 min ago'], ['Tom R.', 'Weekly service', '2 hrs ago'], ['Priya S.', 'Move-out clean', 'Yesterday']] },
+    },
+    {
+      id: 'addons', label: 'Add-ons', title: 'Grow when you need to',
+      body: 'Switch on bookings, a members area or a shop — no new tools to bolt on.',
+      view: { kind: 'table', columns: ['Add-on', 'What it does', 'Status'], rows: [['Bookings', 'Customers pick a time online', 'On'], ['Members', 'Private pages for clients', 'Off'], ['Store', 'Sell products or gift cards', 'Off']] },
+    },
+    {
+      id: 'domains', label: 'Domains', title: 'Your domain, handled',
+      body: 'Connect your own domain once. Security certificates renew themselves.',
+      view: { kind: 'table', columns: ['Domain', 'Security', 'Status'], rows: [['sparkleclean-austin.com', 'Secure', 'Connected'], ['www.sparkleclean-austin.com', 'Secure', 'Connected']] },
+    },
+  ]}
+/>
+
+<FeatureGrid
+  id="hosting"
+  eyebrow="Hosting"
+  heading="Hosting you never have to think about."
+  subheading="We run the servers ourselves, so your site stays fast, safe and online."
+  items={[
+    { title: 'Fast everywhere', body: 'Pages are served from locations close to your visitors, wherever they are.' },
+    { title: 'Secure by default', body: 'Security certificates and protection against attacks are built in and kept up to date.' },
+    { title: 'Backed up', body: 'Your site is backed up automatically, and every change can be undone.' },
+    { title: 'Always yours', body: 'Download your whole site — code and content — whenever you like.' },
+    { title: 'Real people', body: 'Questions go to a team that runs the platform, not a call centre.' },
+    { title: 'Room to grow', body: 'Start small and add pages, content and features as your business grows.' },
+  ]}
+/>
+
+<ClosingCta
+  heading="Your new website is a few sentences away."
+  body="Describe your business and see it built — free, with no card needed."
+  ctaLabel="Build my site"
+  ctaHref="#start"
 />

@@ -1,0 +1,40 @@
+---
+/**
+ * HowItWorks — numbered steps.
+ */
+export interface Props {
+  id?: string;
+  eyebrow?: string;
+  heading: string;
+  steps: { title: string; body: string }[];
+}
+
+const { id, eyebrow, heading, steps } = Astro.props;
+---
+<section class="how" id={id}>
+  <div class="inner">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2>{heading}</h2>
+    <ol>
+      {steps.map((s, i) => (
+        <li>
+          <span class="num">{i + 1}</span>
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .how { padding: var(--space-section) var(--space-gutter); }
+  .inner { max-width: var(--width-content); margin: 0 auto; }
+  .eyebrow { color: var(--color-accent); font-weight: 600; font-size: 0.875rem; margin: 0 0 0.75rem; }
+  h2 { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(2rem, 4.5vw, 3.25rem); line-height: 1.08; margin: 0; max-width: 40rem; text-wrap: balance; }
+  ol { list-style: none; padding: 0; margin: 3rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.5rem; }
+  li { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.75rem; }
+  .num { display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--color-surface-2); color: var(--color-accent); font-weight: 700; }
+  h3 { font-size: 1.25rem; margin: 1.25rem 0 0.5rem; }
+  p { color: var(--color-muted); margin: 0; }
+</style>

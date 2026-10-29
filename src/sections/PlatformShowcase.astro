@@ -1,0 +1,131 @@
+---
+/**
+ * PlatformShowcase — the "Run" half: a tabbed preview of the control panel.
+ * Each tab shows either a table (pages, data, leads, add-ons, domains) or a
+ * field editor (content).
+ */
+type Table = { kind: 'table'; columns: string[]; rows: string[][] };
+type Fields = { kind: 'fields'; record: string; fields: { label: string; value: string; multiline?: boolean }[] };
+
+export interface Props {
+  id?: string;
+  eyebrow?: string;
+  heading: string;
+  subheading?: string;
+  tabs: { id: string; label: string; title: string; body: string; view: Table | Fields }[];
+}
+
+const { id, eyebrow, heading, subheading, tabs } = Astro.props;
+---
+<section class="platform" id={id}>
+  <div class="inner">
+    <div class="intro">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2>{heading}</h2>
+      {subheading && <p class="sub">{subheading}</p>}
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Platform areas">
+      {tabs.map((t, i) => (
+        <button type="button" role="tab" id={`tab-${t.id}`} aria-controls={`panel-${t.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-tab={t.id}>{t.label}</button>
+      ))}
+    </div>
+
+    {tabs.map((t, i) => (
+      <div class="panel" role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} hidden={i !== 0}>
+        <div class="copy">
+          <h3>{t.title}</h3>
+          <p>{t.body}</p>
+        </div>
+        <div class="app" aria-hidden="true">
+          <div class="app-side">
+            {tabs.map((s) => <span class={s.id === t.id ? 'on' : ''}>{s.label}</span>)}
+          </div>
+          <div class="app-main">
+            {t.view.kind === 'table' ? (
+              <table>
+                <thead><tr>{t.view.columns.map((c) => <th>{c}</th>)}</tr></thead>
+                <tbody>{t.view.rows.map((r) => <tr>{r.map((c) => <td>{c}</td>)}</tr>)}</tbody>
+              </table>
+            ) : (
+              <div class="fields">
+                <p class="record">{t.view.record}</p>
+                {t.view.fields.map((f) => (
+                  <div class="field">
+                    <span>{f.label}</span>
+                    <div class={f.multiline ? 'value multi' : 'value'}>{f.value}</div>
+                  </div>
+                ))}
+                <em class="save">Save</em>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.platform [role="tablist"]').forEach((list) => {
+    const tabs = Array.from(list.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const select = (tab: HTMLButtonElement) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !on;
+      });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', (e) => {
+        const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!step) return;
+        const next = tabs[(i + step + tabs.length) % tabs.length];
+        select(next);
+        next.focus();
+      });
+    });
+  });
+</script>
+
+<style>
+  .platform { padding: var(--space-section) var(--space-gutter); background: var(--color-surface-2); }
+  .inner { max-width: var(--width-content); margin: 0 auto; }
+  .intro { max-width: 44rem; }
+  .eyebrow { color: var(--color-accent); font-weight: 600; font-size: 0.875rem; margin: 0 0 0.75rem; }
+  h2 { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(2rem, 4.5vw, 3.25rem); line-height: 1.08; margin: 0; text-wrap: balance; }
+  .sub { color: var(--color-muted); font-size: 1.125rem; margin: 1rem 0 0; }
+
+  .tabs { display: flex; gap: 0.5rem; margin: 2.5rem 0 1.5rem; overflow-x: auto; padding-bottom: 0.25rem; }
+  [role='tab'] { font: inherit; font-size: 0.9375rem; font-weight: 600; white-space: nowrap; color: var(--color-muted); background: transparent; border: 1px solid var(--color-border); border-radius: 999px; padding: 0.5rem 1rem; cursor: pointer; }
+  [role='tab'][aria-selected='true'] { color: var(--color-accent-text); background: var(--color-accent); border-color: var(--color-accent); }
+
+  .panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem; align-items: start; }
+  .panel[hidden] { display: none; }
+  .copy h3 { font-size: 1.5rem; margin: 0.5rem 0 0.75rem; }
+  .copy p { color: var(--color-muted); margin: 0; }
+
+  .app { display: grid; grid-template-columns: 9rem minmax(0, 1fr); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; min-height: 20rem; }
+  .app-side { display: flex; flex-direction: column; gap: 0.25rem; padding: 1rem 0.75rem; background: var(--color-bg); border-right: 1px solid var(--color-border); font-size: 0.875rem; color: var(--color-muted); }
+  .app-side span { padding: 0.375rem 0.625rem; border-radius: 0.5rem; }
+  .app-side .on { background: var(--color-surface-2); color: var(--color-accent); font-weight: 600; }
+  .app-main { padding: 1.25rem; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  th { text-align: left; color: var(--color-muted); font-weight: 600; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border); white-space: nowrap; }
+  td { padding: 0.75rem; border-bottom: 1px solid var(--color-border); white-space: nowrap; }
+  .fields { display: grid; gap: 0.875rem; }
+  .record { margin: 0; font-weight: 600; }
+  .field span { display: block; font-size: 0.8125rem; color: var(--color-muted); margin-bottom: 0.25rem; }
+  .value { border: 1px solid var(--color-border); border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.9375rem; background: var(--color-bg); }
+  .value.multi { min-height: 4.5rem; }
+  .save { justify-self: end; font-style: normal; font-weight: 600; color: var(--color-accent-text); background: var(--color-accent); border-radius: 0.5rem; padding: 0.5rem 1.25rem; font-size: 0.875rem; }
+
+  @media (max-width: 860px) {
+    .panel { grid-template-columns: 1fr; }
+    .app { grid-template-columns: 1fr; }
+    .app-side { display: none; }
+  }
+</style>

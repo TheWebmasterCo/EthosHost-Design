@@ -1,0 +1,28 @@
+---
+/**
+ * ClosingCta — last call to action.
+ */
+export interface Props {
+  heading: string;
+  body?: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+
+const { heading, body, ctaLabel, ctaHref } = Astro.props;
+---
+<section class="closing">
+  <div class="card">
+    <h2>{heading}</h2>
+    {body && <p>{body}</p>}
+    <a href={ctaHref}>{ctaLabel} <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+
+<style>
+  .closing { padding: 0 var(--space-gutter) var(--space-section); }
+  .card { max-width: var(--width-content); margin: 0 auto; text-align: center; background: var(--color-accent); color: var(--color-accent-text); border-radius: var(--radius-lg); padding: clamp(3rem, 7vw, 5rem) 1.5rem; }
+  h2 { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(2rem, 4.5vw, 3.25rem); line-height: 1.08; margin: 0 auto; max-width: 36rem; text-wrap: balance; }
+  p { opacity: 0.85; margin: 1rem auto 0; max-width: 32rem; }
+  a { display: inline-block; margin-top: 2rem; background: var(--color-surface); color: var(--color-accent); text-decoration: none; font-weight: 600; border-radius: var(--radius); padding: 0.875rem 1.5rem; }
+</style>
