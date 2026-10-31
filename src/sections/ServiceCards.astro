@@ -1,0 +1,44 @@
+---
+/**
+ * ServiceCards — what the business offers, with optional starting prices.
+ */
+export interface Props {
+  id?: string;
+  heading: string;
+  subheading?: string;
+  items: { name: string; body: string; price?: string }[];
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { id, heading, subheading, items, ctaLabel, ctaHref } = Astro.props;
+---
+<section class="services" id={id}>
+  <div class="inner">
+    <h2>{heading}</h2>
+    {subheading && <p class="sub">{subheading}</p>}
+    <ul>
+      {items.map((s) => (
+        <li>
+          <h3>{s.name}</h3>
+          <p>{s.body}</p>
+          {s.price && <p class="price">{s.price}</p>}
+        </li>
+      ))}
+    </ul>
+    {ctaLabel && ctaHref && <a class="cta" href={ctaHref}>{ctaLabel}</a>}
+  </div>
+</section>
+
+<style>
+  .services { padding: var(--space-section) var(--space-gutter); background: var(--color-surface-2); }
+  .inner { max-width: var(--width-content); margin: 0 auto; text-align: center; }
+  h2 { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(1.875rem, 4vw, 2.75rem); line-height: 1.1; margin: 0; }
+  .sub { color: var(--color-muted); margin: 0.75rem auto 0; max-width: 36rem; }
+  ul { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.25rem; text-align: left; }
+  li { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 1.75rem; display: flex; flex-direction: column; }
+  h3 { font-size: 1.1875rem; margin: 0 0 0.5rem; }
+  li p { color: var(--color-muted); margin: 0; flex: 1; }
+  li .price { color: var(--color-accent); font-weight: 600; margin-top: 1.25rem; flex: 0; }
+  .cta { display: inline-block; margin-top: 2.5rem; text-decoration: none; font-weight: 600; color: var(--color-accent-text); background: var(--color-accent); border-radius: var(--radius); padding: 0.875rem 1.375rem; }
+</style>

@@ -1,0 +1,71 @@
+---
+/**
+ * QuoteForm — contact / quote request form beside the business's details.
+ * Posts to the platform's hosted form endpoint (wired later).
+ */
+export interface Props {
+  id?: string;
+  heading: string;
+  subheading?: string;
+  fields: { name: string; label: string; type?: 'text' | 'email' | 'tel' | 'textarea' | 'select'; options?: string[]; required?: boolean }[];
+  submitLabel: string;
+  phone?: string;
+  email?: string;
+  hours?: string[];
+  area?: string;
+}
+
+const { id, heading, subheading, fields, submitLabel, phone, email, hours = [], area } = Astro.props;
+---
+<section class="quote" id={id}>
+  <div class="inner">
+    <div class="details">
+      <h2>{heading}</h2>
+      {subheading && <p class="sub">{subheading}</p>}
+      <dl>
+        {phone && (<><dt>Call</dt><dd><a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>{phone}</a></dd></>)}
+        {email && (<><dt>Email</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></>)}
+        {hours.length > 0 && (<><dt>Hours</dt><dd>{hours.map((h) => <span>{h}</span>)}</dd></>)}
+        {area && (<><dt>Area</dt><dd>{area}</dd></>)}
+      </dl>
+    </div>
+    <form action="#" data-quote-form>
+      {fields.map((f) => (
+        <label>
+          <span>{f.label}{f.required && <em aria-hidden="true"> *</em>}</span>
+          {f.type === 'textarea' ? (
+            <textarea name={f.name} rows="4" required={f.required}></textarea>
+          ) : f.type === 'select' ? (
+            <select name={f.name} required={f.required}>{(f.options ?? []).map((o) => <option>{o}</option>)}</select>
+          ) : (
+            <input name={f.name} type={f.type ?? 'text'} required={f.required} />
+          )}
+        </label>
+      ))}
+      <button type="submit">{submitLabel}</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Example only — not wired to the forms endpoint yet.
+  document.querySelectorAll('[data-quote-form]').forEach((f) => f.addEventListener('submit', (e) => e.preventDefault()));
+</script>
+
+<style>
+  .quote { padding: var(--space-section) var(--space-gutter); }
+  .inner { max-width: var(--width-content); margin: 0 auto; display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+  h2 { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(1.875rem, 4vw, 2.75rem); line-height: 1.1; margin: 0; }
+  .sub { color: var(--color-muted); margin: 1rem 0 0; }
+  dl { margin: 2rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.75rem 1.5rem; }
+  dt { color: var(--color-muted); font-size: 0.875rem; padding-top: 0.125rem; }
+  dd { margin: 0; display: grid; }
+  dd a { color: var(--color-accent); font-weight: 600; text-decoration: none; }
+  form { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); padding: clamp(1.25rem, 3vw, 2rem); display: grid; gap: 1rem; }
+  label span { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.375rem; }
+  label em { color: var(--color-accent); font-style: normal; }
+  input, textarea, select { width: 100%; font: inherit; color: var(--color-text); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 0.5rem; padding: 0.625rem 0.75rem; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+  button { font: inherit; font-weight: 600; color: var(--color-accent-text); background: var(--color-accent); border: 0; border-radius: var(--radius); padding: 0.875rem 1.25rem; cursor: pointer; }
+  @media (max-width: 820px) { .inner { grid-template-columns: 1fr; } }
+</style>

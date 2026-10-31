@@ -1,0 +1,32 @@
+---
+/**
+ * BusinessHeader — a customer site's top bar: name, links, main call to action.
+ */
+export interface Props {
+  name: string;
+  links?: { label: string; href: string }[];
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const { name, links = [], ctaLabel, ctaHref } = Astro.props;
+---
+<header class="biz-header">
+  <div class="inner">
+    <a class="name" href="#top">{name}</a>
+    <nav aria-label="Main">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      {ctaLabel && ctaHref && <a class="cta" href={ctaHref}>{ctaLabel}</a>}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .biz-header { padding: 1rem var(--space-gutter); border-bottom: 1px solid var(--color-border); background: var(--color-surface); }
+  .inner { max-width: var(--width-content); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .name { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: 1.375rem; color: var(--color-text); text-decoration: none; }
+  nav { display: flex; align-items: center; gap: 1.5rem; }
+  nav a { color: var(--color-muted); text-decoration: none; font-size: 0.9375rem; }
+  nav a.cta { color: var(--color-accent-text); background: var(--color-accent); padding: 0.5rem 1rem; border-radius: 999px; font-weight: 600; }
+  @media (max-width: 720px) { nav a:not(.cta) { display: none; } }
+</style>

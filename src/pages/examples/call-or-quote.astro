@@ -1,0 +1,91 @@
+---
+/**
+ * Example output: what Ethos Builder makes for a "call or quote" business.
+ * Made only from library sections + a look, exactly as the builder would.
+ * Uses the `tide` look to show a customer site looks different from ethoshost.com.
+ */
+import Page from '../../layouts/Page.astro';
+import BusinessHeader from '../../sections/BusinessHeader.astro';
+import ServiceHero from '../../sections/ServiceHero.astro';
+import ServiceCards from '../../sections/ServiceCards.astro';
+import Reviews from '../../sections/Reviews.astro';
+import Faq from '../../sections/Faq.astro';
+import QuoteForm from '../../sections/QuoteForm.astro';
+import BusinessFooter from '../../sections/BusinessFooter.astro';
+
+const phone = '(512) 555-0142';
+---
+<Page title="Sparkle Clean Austin — house cleaning in Austin, TX" description="Example site made by Ethos Builder." look="tide">
+  <BusinessHeader
+    name="Sparkle Clean"
+    links={[{ label: 'Services', href: '#services' }, { label: 'Reviews', href: '#reviews' }, { label: 'FAQ', href: '#faq' }]}
+    ctaLabel="Get a quote"
+    ctaHref="#quote"
+  />
+  <ServiceHero
+    heading="Austin's friendliest home cleaners."
+    subheading="Family-owned since 2014. Every cleaner is insured, background-checked, and shows up on time — or your next clean is on us."
+    primaryLabel={`Call ${phone}`}
+    primaryHref="tel:5125550142"
+    secondaryLabel="Get a free quote"
+    secondaryHref="#quote"
+    trust={['Insured & bonded', '4.9 stars on Google', 'Eco-friendly products']}
+    imageAlt="A cleaner wiping a bright kitchen counter"
+  />
+  <ServiceCards
+    id="services"
+    heading="Cleaning that fits your home"
+    subheading="One-off or every week. Prices are a starting point — we'll confirm after a quick chat."
+    items={[
+      { name: 'Standard clean', body: 'Kitchen, bathrooms, dusting, floors — the full weekly reset.', price: 'From $129' },
+      { name: 'Deep clean', body: 'Top-to-bottom, inside appliances and behind furniture.', price: 'From $249' },
+      { name: 'Move-in / move-out', body: 'Empty-home clean to get your deposit back or start fresh.', price: 'From $299' },
+      { name: 'Office clean', body: 'Evenings or weekends, so your team never notices us.', price: 'Free quote' },
+    ]}
+    ctaLabel="Get a free quote"
+    ctaHref="#quote"
+  />
+  <Reviews
+    id="reviews"
+    heading="Neighbours love us"
+    rating="4.9"
+    ratingNote="from 212 Google reviews"
+    items={[
+      { quote: 'They were on time, thorough, and my oven looks brand new. Booking again next month.', name: 'Maria G.', detail: 'Hyde Park' },
+      { quote: 'The move-out clean got us our full deposit back. Worth every penny.', name: 'Tom R.', detail: 'East Austin' },
+      { quote: 'Same friendly team every two weeks. Our house has never been this calm.', name: 'Priya S.', detail: 'Mueller' },
+    ]}
+  />
+  <Faq
+    id="faq"
+    heading="Questions, answered"
+    items={[
+      { q: 'Do I need to be home?', a: 'No. Most clients leave a key or a door code. Your cleaner texts when they arrive and when they finish.' },
+      { q: 'Do you bring your own supplies?', a: 'Yes — everything, including eco-friendly products. Tell us if you have favourites and we\'ll use those.' },
+      { q: 'What if I\'m not happy?', a: 'Tell us within 24 hours and we\'ll come back and fix it, free.' },
+      { q: 'Which areas do you cover?', a: 'All of Austin plus Round Rock, Pflugerville and Cedar Park.' },
+    ]}
+  />
+  <QuoteForm
+    id="quote"
+    heading="Get your free quote"
+    subheading="Tell us a little about your home and we'll reply within one business day — usually much sooner."
+    fields={[
+      { name: 'name', label: 'Your name', required: true },
+      { name: 'phone', label: 'Phone', type: 'tel', required: true },
+      { name: 'email', label: 'Email', type: 'email' },
+      { name: 'service', label: 'What do you need?', type: 'select', options: ['Standard clean', 'Deep clean', 'Move-in / move-out', 'Office clean', 'Not sure yet'] },
+      { name: 'message', label: 'Anything we should know?', type: 'textarea' },
+    ]}
+    submitLabel="Send my request"
+    phone={phone}
+    email="hello@sparkleclean-austin.com"
+    hours={['Mon–Fri 8am–6pm', 'Sat 9am–2pm']}
+    area="Austin, Round Rock, Pflugerville, Cedar Park"
+  />
+  <BusinessFooter
+    name="Sparkle Clean"
+    line={`Austin, Texas · ${phone}`}
+    links={[{ label: 'Services', href: '#services' }, { label: 'Reviews', href: '#reviews' }, { label: 'Get a quote', href: '#quote' }]}
+  />
+</Page>

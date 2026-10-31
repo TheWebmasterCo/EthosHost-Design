@@ -1,0 +1,111 @@
+---
+/**
+ * Pricing — plan cards with an annual / monthly switch.
+ * Prices are whole dollars per month.
+ */
+export interface Props {
+  id?: string;
+  eyebrow?: string;
+  heading: string;
+  subheading?: string;
+  plans: {
+    name: string;
+    blurb: string;
+    annual: number;
+    monthly: number;
+    features: string[];
+    ctaLabel: string;
+    ctaHref: string;
+    highlighted?: boolean;
+  }[];
+  promises?: string[];
+}
+
+const { id, eyebrow, heading, subheading, plans, promises = [] } = Astro.props;
+---
+<section class="pricing" id={id}>
+  <div class="inner">
+    <div class="intro">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2>{heading}</h2>
+      {subheading && <p class="sub">{subheading}</p>}
+      <div class="cycle" role="group" aria-label="Billing">
+        <button type="button" data-cycle="annual" aria-pressed="true">Yearly <span>save up to 20%</span></button>
+        <button type="button" data-cycle="monthly" aria-pressed="false">Monthly</button>
+      </div>
+    </div>
+
+    <ul class="plans">
+      {plans.map((p) => (
+        <li class={p.highlighted ? 'plan highlighted' : 'plan'}>
+          {p.highlighted && <p class="badge">Most popular</p>}
+          <h3>{p.name}</h3>
+          <p class="blurb">{p.blurb}</p>
+          <p class="price">
+            <span class="amount" data-annual={`$${p.annual}`} data-monthly={`$${p.monthly}`}>${p.annual}</span>
+            <span class="per">/month</span>
+          </p>
+          <p class="billed" data-annual="billed yearly" data-monthly="billed monthly">billed yearly</p>
+          <a class="cta" href={p.ctaHref}>{p.ctaLabel}</a>
+          <ul class="features">
+            {p.features.map((f) => <li>{f}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ul>
+
+    {promises.length > 0 && (
+      <ul class="promises">
+        {promises.map((t) => <li>{t}</li>)}
+      </ul>
+    )}
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.pricing').forEach((section) => {
+    const buttons = section.querySelectorAll<HTMLButtonElement>('[data-cycle]');
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        const cycle = b.dataset.cycle as 'annual' | 'monthly';
+        buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        section.querySelectorAll<HTMLElement>('[data-annual]').forEach((el) => {
+          el.textContent = el.dataset[cycle] ?? el.textContent;
+        });
+      }),
+    );
+  });
+</script>
+
+<style>
+  .pricing { padding: var(--space-section) var(--space-gutter); }
+  .inner { max-width: var(--width-content); margin: 0 auto; }
+  .intro { text-align: center; max-width: 40rem; margin: 0 auto; }
+  .eyebrow { color: var(--color-accent); font-weight: 600; font-size: 0.875rem; margin: 0 0 0.75rem; }
+  h2 { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: clamp(2rem, 4.5vw, 3.25rem); line-height: 1.08; margin: 0; text-wrap: balance; }
+  .sub { color: var(--color-muted); font-size: 1.125rem; margin: 1rem 0 0; }
+
+  .cycle { display: inline-flex; gap: 0.25rem; margin-top: 2rem; padding: 0.25rem; background: var(--color-surface-2); border-radius: 999px; }
+  .cycle button { font: inherit; font-size: 0.875rem; font-weight: 600; color: var(--color-muted); background: transparent; border: 0; border-radius: 999px; padding: 0.5rem 1rem; cursor: pointer; }
+  .cycle button[aria-pressed='true'] { background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow); }
+  .cycle span { color: var(--color-accent); font-weight: 500; margin-left: 0.25rem; }
+
+  .plans { list-style: none; padding: 0; margin: 3rem 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.5rem; align-items: start; }
+  .plan { position: relative; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 2rem; }
+  .plan.highlighted { border: 2px solid var(--color-accent); box-shadow: var(--shadow-lg); }
+  .badge { position: absolute; top: -0.875rem; left: 2rem; margin: 0; background: var(--color-accent); color: var(--color-accent-text); font-size: 0.75rem; font-weight: 600; border-radius: 999px; padding: 0.25rem 0.75rem; }
+  h3 { font-size: 1.25rem; margin: 0; }
+  .blurb { color: var(--color-muted); margin: 0.375rem 0 0; min-height: 3rem; }
+  .price { margin: 1.25rem 0 0; display: flex; align-items: baseline; gap: 0.25rem; }
+  .amount { font-family: var(--font-display); font-weight: var(--display-weight); letter-spacing: var(--display-tracking); font-size: 3rem; line-height: 1; }
+  .per { color: var(--color-muted); }
+  .billed { color: var(--color-muted); font-size: 0.8125rem; margin: 0.375rem 0 0; }
+  .cta { display: block; text-align: center; margin-top: 1.5rem; padding: 0.75rem 1rem; border-radius: var(--radius); font-weight: 600; text-decoration: none; color: var(--color-accent); border: 1px solid var(--color-accent); }
+  .highlighted .cta { background: var(--color-accent); color: var(--color-accent-text); }
+  .features { list-style: none; padding: 0; margin: 1.75rem 0 0; display: grid; gap: 0.625rem; font-size: 0.9375rem; }
+  .features li { padding-left: 1.5rem; position: relative; }
+  .features li::before { content: ''; position: absolute; left: 0.125rem; top: 0.45em; width: 0.5rem; height: 0.875rem; border: solid var(--color-accent); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+
+  .promises { list-style: none; padding: 0; margin: 2.5rem auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem 2rem; color: var(--color-muted); font-size: 0.9375rem; }
+  .promises li::before { content: '•'; color: var(--color-highlight); margin-right: 0.5rem; }
+</style>

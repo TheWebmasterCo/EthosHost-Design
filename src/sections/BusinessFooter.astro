@@ -1,0 +1,33 @@
+---
+/**
+ * BusinessFooter — name, contact line, links, and a small builder credit.
+ */
+export interface Props {
+  name: string;
+  line?: string;
+  links?: { label: string; href: string }[];
+  credit?: boolean;
+}
+
+const { name, line, links = [], credit = true } = Astro.props;
+---
+<footer class="biz-footer">
+  <div class="inner">
+    <div>
+      <p class="name">{name}</p>
+      {line && <p class="line">{line}</p>}
+    </div>
+    <nav aria-label="Footer">{links.map((l) => <a href={l.href}>{l.label}</a>)}</nav>
+  </div>
+  {credit && <p class="credit">Built with Ethos Builder</p>}
+</footer>
+
+<style>
+  .biz-footer { padding: 3rem var(--space-gutter) 2rem; background: var(--color-text); color: var(--color-bg); }
+  .inner { max-width: var(--width-content); margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1.5rem; }
+  .name { font-family: var(--font-display); font-weight: var(--display-weight); font-size: 1.375rem; margin: 0; }
+  .line { opacity: 0.75; margin: 0.5rem 0 0; font-size: 0.9375rem; }
+  nav { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+  nav a { color: inherit; opacity: 0.8; text-decoration: none; font-size: 0.9375rem; }
+  .credit { max-width: var(--width-content); margin: 2.5rem auto 0; font-size: 0.75rem; opacity: 0.55; }
+</style>
